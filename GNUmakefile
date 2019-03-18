@@ -50,7 +50,7 @@ targets: $(TARGETS)
 
 $(TARGETS):
 	GOOS=$@ GOARCH=amd64 CGO_ENABLED=0 go build -o "dist/$@/terraform-provider-rabbitmq_${TRAVIS_TAG}_x4" -a -ldflags '-extldflags "-static"'
-	zip -j dist/terraform-provider-rabbitmq_${TRAVIS_TAG}_$@_amd64.zip dist/$@/terraform-provider-kubernetes_${TRAVIS_TAG}_x4
+	zip -j dist/terraform-provider-rabbitmq_${TRAVIS_TAG}_$@_amd64.zip dist/$@/terraform-provider-rabbitmq_${TRAVIS_TAG}_x4
 
 
 website:
