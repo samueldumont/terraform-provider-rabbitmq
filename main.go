@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/hashicorp/terraform/plugin"
-	"github.com/terraform-providers/terraform-provider-rabbitmq/rabbitmq"
+	"github.com/samueldumont/terraform-provider-rabbitmq/rabbitmq"
 )
 
 func main() {
