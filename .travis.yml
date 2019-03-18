@@ -4,26 +4,28 @@ services:
 - docker
 language: go
 go:
-  - "1.11.x"
-
+- 1.11.x
 install:
-# This script is used by the Travis build to install a cookie for
-# go.googlesource.com so rate limits are higher when using `go get` to fetch
-# packages that live there.
-# See: https://github.com/golang/go/issues/12933
 - bash scripts/gogetcookie.sh
 - go get github.com/kardianos/govendor
-
 script:
 - make test
 - make vendor-status
 - make vet
 - make website-test
-
 branches:
   only:
-  - master
-matrix:
-  fast_finish: true
-  allow_failures:
-  - go: tip
+  - clientcert
+before_deploy:
+- make targets
+deploy:
+  provider: releases
+  api_key:
+    secure: DUIjVIWKdbhNDgyV6c4jeEyqDm236MIX4SKmJ+qko2spsOiuxTO9+yqcNWNxAmALOL5GqxWiawPfzyo9sLPh+z2u2rvAw+dAHv4pcXS2i8/M7dUhHS6ZH4KerwcBgS6O4vCznyToqABj1nBwwlCoGtSOBIXzb9ans/G9wZBEfRWx4411Bd0+lJNUNxh3If+i/tsu3PKmvD93Bota3BgLQ8pPGZA6goN8DtFiNmpSa/QxwI63TIEsuFKYZgrbiWC9+IWCAUFmaoqKmBmOH74HLaQlFwM9NZToUryrXP5VEvAt/aK5AKsOsHehjy2XZPss82Srgt3Djevprn3YRpsLpkk4rC6ZVILeQD3D+JPYYkmWax/1vWwA3lko4okmhvblfxnt6MZeFZ+0KUy8eFzxSkJVrFYViLqj0PcfL5iDb+VHj1ba4R2UygfrATfvAhep79lUOqSUfB0KFi9qGjWqg1k3fxXU4PHAoDPFdBBkxnA48lDuoU+mROGztaRjx4SaLqzhl7BxiFMWowngXSfkdt8tExFU3mO0RvIrPE0V99RDP435yS+Z+x99tDMVfuGOYrkpOSqm+SRgqYO6YYwR1hIsGAi2/8q2DGvrG1ukUy0esLVbAnGd5TBkkAYUQc/HzvVYzZWWzIeq2mscLYHhJnXPrMi/U3Q4OoYrSkpaRH8=
+  file: dist/*.zip
+  file_glob: true
+  skip_cleanup: true
+  on:
+    repo: samueldumont/terraform-provider-rabbitmq
+    branch: clientcert
+    tags: true

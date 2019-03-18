@@ -2,6 +2,7 @@ TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=rabbitmq
+TARGETS=darwin linux windows
 
 default: build
 
@@ -44,6 +45,13 @@ test-compile:
 		exit 1; \
 	fi
 	go test -c $(TEST) $(TESTARGS)
+
+targets: $(TARGETS)
+
+$(TARGETS):
+	GOOS=$@ GOARCH=amd64 CGO_ENABLED=0 go build -o "dist/$@/terraform-provider-rabbitmq_${TRAVIS_TAG}_x4" -a -ldflags '-extldflags "-static"'
+	zip -j dist/terraform-provider-rabbitmq_${TRAVIS_TAG}_$@_amd64.zip dist/$@/terraform-provider-kubernetes_${TRAVIS_TAG}_x4
+
 
 website:
 ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
