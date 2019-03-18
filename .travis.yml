@@ -16,6 +16,7 @@ script:
 branches:
   only:
   - clientcert
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 before_deploy:
 - make targets
 deploy:
